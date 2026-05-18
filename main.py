@@ -97,13 +97,11 @@ while True:
 
 
 if __name__ == "__main__":
-    # 1. Avviamo il bot in un thread SEPARATO (sottofondo)
+    port = int(os.environ.get("PORT", 8080))
+    # Il thread del bot deve partire PRIMA di app.run
     bot_thread = Thread(target=ciclo_bot)
-    bot_thread.daemon = True # Questo dice a Python: "se chiudo il programma, chiudi anche il bot"
+    bot_thread.daemon = True
     bot_thread.start()
     
-    # 2. Avviamo il server web come processo PRINCIPALE
-    # Questo è quello che Render "ascolta" per dire che il sito è online
-    port = int(os.environ.get("PORT", 8080))
-    print(f"Server in ascolto sulla porta {port}...")
+    # Questo comando BLOCCA l'esecuzione e risponde a Render
     app.run(host='0.0.0.0', port=port)
