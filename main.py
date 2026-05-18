@@ -5,6 +5,7 @@ import telebot
 import time
 from threading import Thread
 from flask import Flask
+import os 
 
 app = Flask('')
 
@@ -13,7 +14,8 @@ def home():
     return "Il bot è vivo"
 
 def run_web_server():
-    app.run(host='0.0.0.0', port=8080)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
 
 TOKEN_TELEGRAM = "8910104115:AAEtEZtzhkcj0jXkZt5PPpRONzWVfCUdxdw"
 API_KEY_NEWS = "7d607a1e6a6946ceb49412b3c191f24b"
