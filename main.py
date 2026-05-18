@@ -14,7 +14,10 @@ def home():
     return "Il bot è vivo"
 
 def run_web_server():
-    port = int(os.environ.get("PORT", 8080))
+    # Render usa la variabile d'ambiente 'PORT'. Se non la trova, usa la 10000
+    port = int(os.environ.get("PORT", 10000)) 
+    print(f"Avvio Web Server sulla porta {port}...")
+    # L'host '0.0.0.0' è OBBLIGATORIO per i server cloud
     app.run(host='0.0.0.0', port=port)
 
 TOKEN_TELEGRAM = "8910104115:AAEtEZtzhkcj0jXkZt5PPpRONzWVfCUdxdw"
@@ -97,11 +100,10 @@ while True:
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    # Il thread del bot deve partire PRIMA di app.run
-    bot_thread = Thread(target=ciclo_bot)
-    bot_thread.daemon = True
-    bot_thread.start()
+    # Avviamo il bot in background
+    t = Thread(target=ciclo_bot)
+    t.daemon = True
+    t.start()
     
-    # Questo comando BLOCCA l'esecuzione e risponde a Render
-    app.run(host='0.0.0.0', port=port)
+    # Avviamo il server Flask
+    run_web_server()
